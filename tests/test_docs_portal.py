@@ -172,3 +172,4 @@ def test_workflows_keep_deterministic_and_remote_link_checks_separate() -> None:
     assert "astral-sh/setup-uv@v8.3.2" in deploy_workflow
     assert "schedule:" in external_links_workflow
     assert "lycheeverse/lychee-action@v2" in external_links_workflow
+    assert "--exclude-all-private" in external_links_workflow

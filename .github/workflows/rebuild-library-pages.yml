@@ -1,0 +1,122 @@
+name: Rebuild allowlisted library documentation
+
+on:
+  repository_dispatch:
+    types:
+      - library-release-published
+  workflow_dispatch:
+    inputs:
+      repository:
+        description: Allowlisted GitHub repository identity
+        required: true
+        type: choice
+        options:
+          - evgesha9400/ig-trading-lib
+          - evgesha9400/kucoin-futures-lib
+      tag:
+        description: Canonical v-prefixed semantic-version tag
+        required: true
+        type: string
+      version:
+        description: Semantic version without the v prefix
+        required: true
+        type: string
+      commit:
+        description: Lowercase 40-character commit SHA
+        required: true
+        type: string
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Validate requested release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check out portal repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v8.3.2
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Install locked dependencies
+        run: uv sync --locked
+
+      - name: Validate allowlisted release
+        env:
+          LIBRARY_REPOSITORY: ${{ github.event_name == 'workflow_dispatch' && inputs.repository || github.event.client_payload.repository }}
+          LIBRARY_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.event.client_payload.tag }}
+          LIBRARY_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.event.client_payload.version }}
+          LIBRARY_COMMIT: ${{ github.event_name == 'workflow_dispatch' && inputs.commit || github.event.client_payload.commit }}
+        run: >-
+          uv run python -m scripts.validate_library_release
+          --repository "$LIBRARY_REPOSITORY"
+          --tag "$LIBRARY_TAG"
+          --version "$LIBRARY_VERSION"
+          --commit "$LIBRARY_COMMIT"
+
+  build:
+    name: Build Pages artifact
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check out portal repository
+        uses: actions/checkout@v5
+
+      - name: Set up Pages
+        uses: actions/configure-pages@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v8.3.2
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Install locked dependencies
+        run: uv sync --locked
+
+      - name: Build current static portal strictly
+        run: uv run mkdocs build --strict
+
+      - name: Check generated local links and anchors
+        run: uv run python scripts/check_links.py --site site
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+
+  deploy:
+    name: Deploy Pages artifact
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -36,6 +36,7 @@ nav:
   - Libraries:
       - IG Trading Library: libraries/ig-trading-lib.md
       - KuCoin Futures Library: libraries/kucoin-futures-lib.md
+  - Catalogue contract: catalogue-contract.md
 
 plugins: [search]
 

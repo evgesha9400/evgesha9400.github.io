@@ -1,0 +1,6 @@
+{
+  "libraries": {
+    "ig-trading-lib": "evgesha9400/ig-trading-lib",
+    "kucoin-futures-lib": "evgesha9400/kucoin-futures-lib"
+  }
+}
