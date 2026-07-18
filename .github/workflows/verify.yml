@@ -1,0 +1,57 @@
+name: Verify documentation portal
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Build, link-check, and test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Install locked dependencies
+        run: uv sync --locked
+
+      - name: Install Chromium for browser checks
+        run: uv run playwright install --with-deps chromium
+
+      - name: Check formatting
+        run: uv run ruff format --check .
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Build documentation strictly
+        run: uv run mkdocs build --strict
+
+      - name: Check generated local links and anchors
+        run: uv run python scripts/check_links.py --site site
+
+      - name: Run browser checks
+        run: uv run pytest
+
+      - name: Upload browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portal-browser-screenshots
+          path: test-results/
+          if-no-files-found: ignore

@@ -1,0 +1,10 @@
+{% extends "main.html" %}
+
+{% block content %}
+  <section class="portal-not-found" aria-labelledby="not-found-heading">
+    <p class="portal-eyebrow">404</p>
+    <h1 id="not-found-heading">Page not found</h1>
+    <p>The page you requested is not part of this documentation portal.</p>
+    <p><a class="portal-primary-action" href="{{ config.site_url | url }}">Return to the documentation portal</a></p>
+  </section>
+{% endblock %}
