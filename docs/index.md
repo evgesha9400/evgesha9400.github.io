@@ -15,22 +15,8 @@ Practical entry points for maintained Python trading libraries. Start with sourc
 <h2 id="libraries-heading">Libraries</h2>
 
 <div class="portal-grid">
-  <article class="portal-card" data-library="ig-trading-lib">
-    <div class="portal-card-heading">
-      <p class="portal-status">documentation release pending</p>
-      <h2>IG Trading Library</h2>
-      <p class="portal-summary">Typed, safety-first synchronous and asynchronous clients for documented IG REST and streaming APIs.</p>
-    </div>
-    <ul class="portal-points">
-      <li>Python 3.11–3.13 support</li>
-      <li>Explicit live-trading safeguards</li>
-      <li>Matching sync and async services</li>
-    </ul>
-    <div class="portal-card-actions" aria-label="IG Trading Library links">
-      <a href="https://github.com/evgesha9400/ig-trading-lib">Source code</a>
-      <a href="https://pypi.org/project/ig-trading-lib/">Package on PyPI</a>
-    </div>
-  </article>
+
+--8<-- "docs/includes/ig-trading-card.md"
 
   <article class="portal-card" data-library="kucoin-futures-lib">
     <div class="portal-card-heading">

@@ -1,9 +1,6 @@
 name: Rebuild allowlisted library documentation
 
 on:
-  repository_dispatch:
-    types:
-      - library-release-published
   workflow_dispatch:
     inputs:
       repository:
@@ -26,19 +23,33 @@ on:
         required: true
         type: string
 
+permissions:
+  contents: read
+
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
-  validate:
-    name: Validate requested release
+  ingest:
+    name: Validate and persist an allowlisted release
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
+    outputs:
+      portal_commit: ${{ steps.persist.outputs.commit }}
     steps:
-      - name: Check out portal repository
+      - name: Check out the fixed portal branch
         uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - name: Require dispatch from the fixed portal branch
+        run: |
+          if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
+            echo "::error::Library releases must dispatch this workflow on main."
+            exit 1
+          fi
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -54,12 +65,12 @@ jobs:
       - name: Install locked dependencies
         run: uv sync --locked
 
-      - name: Validate allowlisted release
+      - name: Validate untrusted release selectors before API access
         env:
-          LIBRARY_REPOSITORY: ${{ github.event_name == 'workflow_dispatch' && inputs.repository || github.event.client_payload.repository }}
-          LIBRARY_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.event.client_payload.tag }}
-          LIBRARY_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.event.client_payload.version }}
-          LIBRARY_COMMIT: ${{ github.event_name == 'workflow_dispatch' && inputs.commit || github.event.client_payload.commit }}
+          LIBRARY_REPOSITORY: ${{ inputs.repository }}
+          LIBRARY_TAG: ${{ inputs.tag }}
+          LIBRARY_VERSION: ${{ inputs.version }}
+          LIBRARY_COMMIT: ${{ inputs.commit }}
         run: >-
           uv run python -m scripts.validate_library_release
           --repository "$LIBRARY_REPOSITORY"
@@ -67,15 +78,99 @@ jobs:
           --version "$LIBRARY_VERSION"
           --commit "$LIBRARY_COMMIT"
 
+      - name: Fetch fixed public release metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LIBRARY_REPOSITORY: ${{ inputs.repository }}
+          LIBRARY_TAG: ${{ inputs.tag }}
+          API_DIRECTORY: ${{ runner.temp }}/library-release-api
+        run: |
+          set -euo pipefail
+          mkdir -p "$API_DIRECTORY"
+          gh api "repos/$LIBRARY_REPOSITORY/releases/tags/$LIBRARY_TAG" \
+            > "$API_DIRECTORY/release.json"
+          gh api "repos/$LIBRARY_REPOSITORY/git/ref/tags/$LIBRARY_TAG" \
+            > "$API_DIRECTORY/tag-reference.json"
+          gh api --method GET "repos/$LIBRARY_REPOSITORY/contents/docs/library.yml" \
+            -f "ref=$LIBRARY_TAG" > "$API_DIRECTORY/manifest.json"
+
+          if uv run python -c '
+          import json
+          import re
+          import sys
+
+          response = json.load(open(sys.argv[1], encoding="utf-8"))
+          object_data = response.get("object", {})
+          is_annotated_tag = (
+              object_data.get("type") == "tag"
+              and isinstance(object_data.get("sha"), str)
+              and re.fullmatch(r"[0-9a-f]{40}", object_data["sha"])
+          )
+          raise SystemExit(0 if is_annotated_tag else 1)
+          ' "$API_DIRECTORY/tag-reference.json"; then
+            annotated_sha="$(uv run python -c '
+            import json
+            import sys
+
+            response = json.load(open(sys.argv[1], encoding="utf-8"))
+            print(response["object"]["sha"])
+            ' "$API_DIRECTORY/tag-reference.json")"
+            gh api "repos/$LIBRARY_REPOSITORY/git/tags/$annotated_sha" \
+              > "$API_DIRECTORY/annotated-tag.json"
+          fi
+
+      - name: Generate and persist derived portal content
+        env:
+          LIBRARY_REPOSITORY: ${{ inputs.repository }}
+          LIBRARY_TAG: ${{ inputs.tag }}
+          LIBRARY_VERSION: ${{ inputs.version }}
+          LIBRARY_COMMIT: ${{ inputs.commit }}
+          API_DIRECTORY: ${{ runner.temp }}/library-release-api
+          PUBLICATION_DIRECTORY: ${{ runner.temp }}/library-release-publication
+        run: |
+          set -euo pipefail
+          annotated_tag_args=()
+          if [[ -f "$API_DIRECTORY/annotated-tag.json" ]]; then
+            annotated_tag_args=(--annotated-tag-response "$API_DIRECTORY/annotated-tag.json")
+          fi
+          uv run python -m scripts.library_release_publication \
+            --repository "$LIBRARY_REPOSITORY" \
+            --tag "$LIBRARY_TAG" \
+            --version "$LIBRARY_VERSION" \
+            --commit "$LIBRARY_COMMIT" \
+            --release-response "$API_DIRECTORY/release.json" \
+            --tag-reference-response "$API_DIRECTORY/tag-reference.json" \
+            --manifest-response "$API_DIRECTORY/manifest.json" \
+            --output-directory "$PUBLICATION_DIRECTORY" \
+            --portal-directory "$GITHUB_WORKSPACE" \
+            "${annotated_tag_args[@]}"
+
+      - id: persist
+        name: Commit only portal-derived release content
+        env:
+          LIBRARY_VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- catalog/releases docs/includes
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(docs): publish release v$LIBRARY_VERSION"
+            git push origin HEAD:main
+          fi
+          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
   build:
     name: Build Pages artifact
-    needs: validate
+    needs: ingest
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
-      - name: Check out portal repository
+      - name: Check out the persisted portal commit
         uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.ingest.outputs.portal_commit }}
 
       - name: Set up Pages
         uses: actions/configure-pages@v5
@@ -94,7 +189,7 @@ jobs:
       - name: Install locked dependencies
         run: uv sync --locked
 
-      - name: Build current static portal strictly
+      - name: Build the portal strictly
         run: uv run mkdocs build --strict
 
       - name: Check generated local links and anchors

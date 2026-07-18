@@ -1,6 +1,6 @@
 # Library catalogue contract
 
-The portal currently remains a static documentation site. The manifest contract validates durable editorial metadata only; it does not fetch, render, execute, or deploy documentation from a library repository.
+The portal is a static documentation site. The manifest contract validates durable editorial metadata only; it never fetches, renders, executes, imports, or deploys a library repository's code or documentation.
 
 ## `docs/library.yml` version 1
 
@@ -37,12 +37,23 @@ The portal validates all of the following before accepting a manifest:
 
 Release identity is a separate, transient event selection. `validate_release_selection` validates an allowlisted repository, a canonical `v`-prefixed semantic-version tag, its matching version, and a lowercase 40-character commit SHA. These values are workflow inputs, not `docs/library.yml` fields, so editorial metadata never becomes self-referential to a future release tag or commit.
 
-## Manual rebuild scaffold
+## Release publication ingress
 
-Run **Rebuild allowlisted library documentation** from the `main` branch and supply its four typed release-event inputs: repository, tag, version, and commit. It validates the event before building the portal and uploading an official GitHub Pages artifact. The deploy job is guarded to `refs/heads/main` and uses the fixed `github-pages` environment.
+The only upstream event ingress is **Rebuild allowlisted library documentation** on the portal's `main` branch. It accepts four untrusted selectors: repository, tag, version, and commit.
+
+- It rejects a selector before contacting GitHub unless the repository is allowlisted and the tag, version, and SHA are canonical.
+- It queries only fixed GitHub API paths for the allowlisted repository: release by tag, tag reference, annotated tag when necessary, and `docs/library.yml` at that tag.
+- The release must be published and non-draft, and its tag must resolve to the supplied commit.
+- The tagged manifest must pass this schema, match the requested repository, and declare `status: published`.
+- The portal derives all source, release, package, immutable-documentation, and `latest` URLs itself.
+- The portal HTML-escapes manifest text and writes only a derived release record plus fixed-template card and detail snippets.
+- A delayed event cannot replace a portal record published at the same or a later time.
+- The portal does not clone, render, execute, import, or deploy upstream code or documentation.
+
+The ingestion job can write only portal-owned release metadata. A separate build job reads the persisted portal commit, and the deployment job alone receives `pages: write` and `id-token: write` for the fixed `github-pages` environment.
 
 ## Future dispatch credential
 
-When upstream-triggered rebuilds are introduced, configure the fine-grained PAT as the Actions secret `LIBRARY_PORTAL_DISPATCH_TOKEN` in each participating library repository. Its repository access must be limited to `evgesha9400/evgesha9400.github.io`, and its minimum repository permission is `Actions: write`.
+Configure the fine-grained PAT as the Actions secret `LIBRARY_PORTAL_DISPATCH_TOKEN` in each participating library repository. Its repository access must be limited to `evgesha9400/evgesha9400.github.io`, and its minimum repository permission is `Actions: write`. The caller dispatches this fixed portal workflow on `main`; it cannot supply a destination, URL, path, workflow, or configuration.
 
-No token is stored in this portal, and this phase does not make any live dispatches.
+No upstream token is stored in this portal.

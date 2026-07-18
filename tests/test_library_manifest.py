@@ -211,25 +211,21 @@ def test_validation_helper_accepts_durable_manifest_without_release_selection(
     assert result.stdout == "Library manifest validation passed.\n"
 
 
-def test_rebuild_workflow_validates_hostile_inputs_before_static_portal_build() -> None:
+def test_rebuild_workflow_validates_hostile_inputs_before_portal_writes() -> None:
     workflow = REBUILD_WORKFLOW_PATH.read_text(encoding="utf-8")
 
     assert "workflow_dispatch:" in workflow
-    assert "repository_dispatch:" in workflow
-    assert "library-release-published" in workflow
+    assert "repository_dispatch:" not in workflow
     assert "repository:" in workflow
     assert "tag:" in workflow
     assert "version:" in workflow
     assert "commit:" in workflow
-    assert "github.event.client_payload.repository" in workflow
-    assert "github.event.client_payload.tag" in workflow
-    assert "github.event.client_payload.version" in workflow
-    assert "github.event.client_payload.commit" in workflow
     assert '--repository "$LIBRARY_REPOSITORY"' in workflow
     assert "scripts.validate_library_release" in workflow
-    assert workflow.index("scripts.validate_library_release") < workflow.index(
-        "mkdocs build --strict"
-    )
+    assert workflow.index("scripts.validate_library_release") < workflow.index("gh api")
+    assert '"$GITHUB_REF" != "refs/heads/main"' in workflow
+    assert "scripts.library_release_publication" in workflow
+    assert "git clone" not in workflow
     assert "actions/configure-pages@v5" in workflow
     assert "actions/upload-pages-artifact@v4" in workflow
     assert "actions/deploy-pages@v4" in workflow
@@ -256,9 +252,11 @@ def test_contract_documentation_names_the_future_dispatch_secret_and_scope() -> 
 
     assert "`LIBRARY_PORTAL_DISPATCH_TOKEN`" in documentation
     assert "`Actions: write`" in documentation
-    assert "does not fetch, render, execute, or deploy" in documentation
+    assert "never fetches, renders, executes, imports, or deploys" in documentation
     assert "`library_id`" in documentation
     assert "`package.name`" in documentation
     assert "`repository_url`" in documentation
     assert "## Release event selection" in documentation
     assert "self-referential to a future release tag or commit" in documentation
+    assert "## Release publication ingress" in documentation
+    assert "published and non-draft" in documentation
