@@ -163,9 +163,12 @@ def test_workflows_keep_deterministic_and_remote_link_checks_separate() -> None:
 
     assert "actions/checkout@v5" in verify_workflow
     assert "actions/setup-python@v6" in verify_workflow
+    assert "astral-sh/setup-uv@v8.3.2" in verify_workflow
+    assert "actions/upload-artifact@v7" in verify_workflow
     assert "lycheeverse/lychee-action" not in verify_workflow
     assert "actions/checkout@v5" in deploy_workflow
     assert "actions/setup-python@v6" in deploy_workflow
     assert "actions/upload-pages-artifact@v4" in deploy_workflow
+    assert "astral-sh/setup-uv@v8.3.2" in deploy_workflow
     assert "schedule:" in external_links_workflow
     assert "lycheeverse/lychee-action@v2" in external_links_workflow
