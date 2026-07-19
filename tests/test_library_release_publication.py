@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import base64
 import json
+import re
 from pathlib import Path
 
 import pytest
+import yaml
 
 from scripts.library_manifest import ManifestValidationError
 from scripts.library_release_publication import (
@@ -266,6 +268,25 @@ def test_rebuild_workflow_is_workflow_dispatch_only_and_uses_fixed_api_paths() -
     assert "contents: write" in workflow
     assert '"$GITHUB_REF" != "refs/heads/main"' in workflow
     assert "actions/deploy-pages@v4" in workflow
+
+
+def test_rebuild_workflow_embedded_python_sources_compile_without_indentation() -> None:
+    """The annotated-tag API branch must not pass YAML indentation to Python."""
+    workflow = yaml.safe_load(REBUILD_WORKFLOW_PATH.read_text(encoding="utf-8"))
+    fetch_metadata_step = next(
+        step
+        for step in workflow["jobs"]["ingest"]["steps"]
+        if step.get("name") == "Fetch fixed public release metadata"
+    )
+    embedded_sources = re.findall(
+        r"uv run python -c '(.*?)' \"\$API_DIRECTORY/tag-reference\.json\"",
+        fetch_metadata_step["run"],
+        flags=re.DOTALL,
+    )
+
+    assert len(embedded_sources) == 2
+    for source in embedded_sources:
+        compile(source, str(REBUILD_WORKFLOW_PATH), "exec")
 
 
 def test_ig_pages_include_only_portal_owned_release_snippets() -> None:

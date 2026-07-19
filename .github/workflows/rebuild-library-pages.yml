@@ -109,12 +109,12 @@ jobs:
           raise SystemExit(0 if is_annotated_tag else 1)
           ' "$API_DIRECTORY/tag-reference.json"; then
             annotated_sha="$(uv run python -c '
-            import json
-            import sys
+          import json
+          import sys
 
-            response = json.load(open(sys.argv[1], encoding="utf-8"))
-            print(response["object"]["sha"])
-            ' "$API_DIRECTORY/tag-reference.json")"
+          response = json.load(open(sys.argv[1], encoding="utf-8"))
+          print(response["object"]["sha"])
+          ' "$API_DIRECTORY/tag-reference.json")"
             gh api "repos/$LIBRARY_REPOSITORY/git/tags/$annotated_sha" \
               > "$API_DIRECTORY/annotated-tag.json"
           fi
