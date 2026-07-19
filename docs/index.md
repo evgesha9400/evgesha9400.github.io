@@ -16,7 +16,7 @@ Practical entry points for maintained Python trading libraries. Start with sourc
 
 <div class="portal-grid">
 
---8<-- "docs/includes/ig-trading-card.md"
+--8<-- "docs/includes/ig-trading-lib-card.md"
 
   <article class="portal-card" data-library="kucoin-futures-lib">
     <div class="portal-card-heading">

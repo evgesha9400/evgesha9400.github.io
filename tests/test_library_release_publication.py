@@ -290,7 +290,10 @@ def test_rebuild_workflow_embedded_python_sources_compile_without_indentation() 
 
 
 def test_ig_pages_include_only_portal_owned_release_snippets() -> None:
-    assert '--8<-- "docs/includes/ig-trading-card.md"' in HOME_PAGE_PATH.read_text(encoding="utf-8")
-    assert '--8<-- "docs/includes/ig-trading-details.md"' in IG_LIBRARY_PAGE_PATH.read_text(
-        encoding="utf-8"
-    )
+    home_page = HOME_PAGE_PATH.read_text(encoding="utf-8")
+    library_page = IG_LIBRARY_PAGE_PATH.read_text(encoding="utf-8")
+
+    assert '--8<-- "docs/includes/ig-trading-lib-card.md"' in home_page
+    assert '--8<-- "docs/includes/ig-trading-lib-details.md"' in library_page
+    assert "docs/includes/ig-trading-card.md" not in home_page
+    assert "docs/includes/ig-trading-details.md" not in library_page
