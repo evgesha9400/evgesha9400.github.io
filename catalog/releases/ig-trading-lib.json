@@ -10,12 +10,12 @@
     "brokerage",
     "trading"
   ],
-  "tag": "v3.0.0",
-  "version": "3.0.0",
-  "commit": "945ae262d11c7c8b0b2ee9a3f31f1e0f2dbf84bd",
-  "published_at": "2026-07-19T01:06:22Z",
-  "release_url": "https://github.com/evgesha9400/ig-trading-lib/releases/tag/v3.0.0",
-  "documentation_url": "https://evgesha9400.github.io/ig-trading-lib/3.0.0/",
+  "tag": "v3.0.1",
+  "version": "3.0.1",
+  "commit": "a1951fca4584d5e314382b394b619c6e819f186d",
+  "published_at": "2026-07-20T13:46:49Z",
+  "release_url": "https://github.com/evgesha9400/ig-trading-lib/releases/tag/v3.0.1",
+  "documentation_url": "https://evgesha9400.github.io/ig-trading-lib/3.0.1/",
   "latest_documentation_url": "https://evgesha9400.github.io/ig-trading-lib/latest/",
   "source_url": "https://github.com/evgesha9400/ig-trading-lib",
   "install_command": "pip install ig-trading-lib"

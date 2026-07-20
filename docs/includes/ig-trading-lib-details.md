@@ -1,4 +1,4 @@
-<p class="library-status">documentation available · v3.0.0</p>
+<p class="library-status">documentation available · v3.0.1</p>
 
 Safe, typed synchronous and asynchronous IG REST and streaming clients.
 
@@ -10,15 +10,15 @@ pip install ig-trading-lib
 
 ## Documentation
 
-- [Version 3.0.0 (immutable)](https://evgesha9400.github.io/ig-trading-lib/3.0.0/)
+- [Version 3.0.1 (immutable)](https://evgesha9400.github.io/ig-trading-lib/3.0.1/)
 - [Latest stable documentation](https://evgesha9400.github.io/ig-trading-lib/latest/)
-- [Release record](https://github.com/evgesha9400/ig-trading-lib/releases/tag/v3.0.0)
+- [Release record](https://github.com/evgesha9400/ig-trading-lib/releases/tag/v3.0.1)
 - [Source code](https://github.com/evgesha9400/ig-trading-lib)
 
 ## Published provenance
 
-- Release tag: v3.0.0
-- Source commit: [`945ae262d11c7c8b0b2ee9a3f31f1e0f2dbf84bd`](https://github.com/evgesha9400/ig-trading-lib/commit/945ae262d11c7c8b0b2ee9a3f31f1e0f2dbf84bd)
+- Release tag: v3.0.1
+- Source commit: [`a1951fca4584d5e314382b394b619c6e819f186d`](https://github.com/evgesha9400/ig-trading-lib/commit/a1951fca4584d5e314382b394b619c6e819f186d)
 - Library: IG Trading Library
 
 ## Safety boundary
