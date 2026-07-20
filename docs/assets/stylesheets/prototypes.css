@@ -213,6 +213,10 @@ body:has(.prototype--editorial) .md-header {
   background: var(--editorial-header);
 }
 
+body:has(.prototype--editorial) .md-grid {
+  max-width: 68rem;
+}
+
 @media screen and (min-width: 60em) {
   body:has(.prototype--editorial) .md-header__inner {
     box-sizing: border-box;
@@ -427,7 +431,7 @@ body:has(.prototype--editorial) .md-header__button.md-logo::after {
 
 .editorial-practice__grid article {
   border-top: 1px solid var(--editorial-rule);
-  padding-top: 1rem;
+  padding-top: 0.65rem;
 }
 
 .editorial-practice__grid article > span {
@@ -439,13 +443,13 @@ body:has(.prototype--editorial) .md-header__button.md-logo::after {
 .md-typeset .editorial-practice__grid h3 {
   color: var(--editorial-ink);
   font-size: 0.85rem;
-  margin: 1rem 0 0.7rem;
+  margin: 0.75rem 0 0.55rem;
 }
 
 .md-typeset .editorial-practice__grid p {
   color: var(--editorial-muted);
-  font-size: 0.74rem;
-  line-height: 1.65;
+  font-size: 0.7rem;
+  line-height: 1.5;
   margin: 0;
 }
 
@@ -473,7 +477,7 @@ body:has(.prototype--editorial) .md-header__button.md-logo::after {
   gap: 2rem;
   grid-template-columns: 4rem minmax(0, 1fr) minmax(14rem, 0.48fr);
   margin-inline: -1rem;
-  padding: clamp(1.8rem, 2.5vw, 2.5rem) 0;
+  padding: clamp(1.4rem, 1.75vw, 1.8rem) 0;
   padding-inline: 1rem;
   transition: background-color 140ms ease;
 }

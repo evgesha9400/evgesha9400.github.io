@@ -391,6 +391,8 @@ def test_editorial_header_content_aligns_with_page_content(page: Page, site_url:
         abs(header_source["x"] + header_source["width"] - page_content["x"] - page_content["width"])
         <= 2
     )
+    assert page_content["width"] <= 1400
+    assert abs(page_content["x"] + page_content["width"] / 2 - 960) <= 2
 
 
 def test_portal_mobile_card_layout_produces_a_visual_artifact(page: Page, site_url: str) -> None:
