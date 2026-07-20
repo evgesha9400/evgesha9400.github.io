@@ -186,6 +186,10 @@ body:has(.prototype--editorial) {
   --editorial-accent: #e9361d;
   --editorial-accent-contrast: #fff8ed;
   --editorial-background: #f1eee5;
+  --editorial-code-background: #e4e0d5;
+  --editorial-code-icon: #39352e;
+  --editorial-code-icon-hover: #a82110;
+  --editorial-code-text: #2e2b25;
   --editorial-header: #171611;
   --editorial-hover: rgb(233 54 29 / 5%);
   --editorial-ink: #191814;
@@ -202,6 +206,10 @@ body[data-md-color-scheme="slate"]:has(.prototype--editorial) {
   --editorial-accent: #ff654d;
   --editorial-accent-contrast: #1a1814;
   --editorial-background: #1b1915;
+  --editorial-code-background: #292721;
+  --editorial-code-icon: #f4efe4;
+  --editorial-code-icon-hover: #ff806d;
+  --editorial-code-text: #f4efe4;
   --editorial-header: #100f0d;
   --editorial-hover: rgb(255 101 77 / 7%);
   --editorial-ink: #f4efe4;
@@ -566,8 +574,20 @@ body:has(.prototype--editorial) .md-header__button.md-logo::after {
 }
 
 .md-typeset .editorial-install pre {
+  background: var(--editorial-code-background);
   border-radius: 0.25rem;
+  color: var(--editorial-code-text);
   font-size: 0.68rem;
+}
+
+.md-typeset .editorial-install .md-code__button {
+  color: var(--editorial-code-icon);
+  opacity: 1;
+}
+
+.md-typeset .editorial-install .md-code__button:hover,
+.md-typeset .editorial-install .md-code__button:focus-visible {
+  color: var(--editorial-code-icon-hover);
 }
 
 /* Direction 02: systems console */

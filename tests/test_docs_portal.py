@@ -321,6 +321,43 @@ def test_editorial_install_commands_are_highlighted_and_copyable(
     assert page.evaluate("navigator.clipboard.readText()") == command
 
 
+@pytest.mark.parametrize("scheme", ["default", "slate"])
+def test_editorial_copy_control_has_accessible_contrast(
+    page: Page, site_url: str, scheme: str
+) -> None:
+    page.goto(f"{site_url}/prototypes/editorial-registry/", wait_until="networkidle")
+    page.locator("body").evaluate(
+        "(element, colorScheme) => element.dataset.mdColorScheme = colorScheme", scheme
+    )
+
+    copy_button = page.locator(".editorial-install .md-code__button").first
+    contrast = copy_button.evaluate(
+        """element => {
+            const parseRgb = value => value.match(/[\\d.]+/g).slice(0, 3).map(Number)
+            const luminance = color => {
+                const channels = color.map(value => value / 255).map(
+                    value => value <= 0.04045
+                        ? value / 12.92
+                        : ((value + 0.055) / 1.055) ** 2.4
+                )
+                return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]
+            }
+            const foreground = luminance(parseRgb(getComputedStyle(element).color))
+            const background = luminance(
+                parseRgb(getComputedStyle(element.closest('pre')).backgroundColor)
+            )
+            return {
+                opacity: Number(getComputedStyle(element).opacity),
+                ratio: (Math.max(foreground, background) + 0.05)
+                    / (Math.min(foreground, background) + 0.05),
+            }
+        }"""
+    )
+
+    assert contrast["opacity"] == 1
+    assert contrast["ratio"] >= 4.5
+
+
 def test_editorial_search_joins_rounded_input_and_results(page: Page, site_url: str) -> None:
     page.set_viewport_size({"width": 1440, "height": 1000})
     page.goto(f"{site_url}/prototypes/editorial-registry/", wait_until="networkidle")
