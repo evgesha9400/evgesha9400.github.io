@@ -482,6 +482,48 @@ def test_editorial_search_joins_rounded_input_and_results(page: Page, site_url: 
     assert screenshot_path.read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
 
 
+def test_editorial_search_returns_to_pill_after_outside_click(page: Page, site_url: str) -> None:
+    page.set_viewport_size({"width": 1440, "height": 1000})
+    page.goto(f"{site_url}/prototypes/editorial-registry/", wait_until="networkidle")
+
+    search_form = page.locator(".md-search__form")
+    search_output = page.locator(".md-search__output")
+    search_toggle = page.locator('[data-md-toggle="search"]')
+    closed_radii = search_form.evaluate(
+        """element => {
+            const style = getComputedStyle(element)
+            return [
+                style.borderTopLeftRadius,
+                style.borderTopRightRadius,
+                style.borderBottomRightRadius,
+                style.borderBottomLeftRadius,
+            ]
+        }"""
+    )
+
+    page.get_by_role("textbox", name="Search").click()
+    page.wait_for_timeout(250)
+    page.mouse.click(16, 300)
+    page.wait_for_timeout(250)
+
+    returned_radii = search_form.evaluate(
+        """element => {
+            const style = getComputedStyle(element)
+            return [
+                style.borderTopLeftRadius,
+                style.borderTopRightRadius,
+                style.borderBottomRightRadius,
+                style.borderBottomLeftRadius,
+            ]
+        }"""
+    )
+    output_box = search_output.bounding_box()
+    assert output_box is not None
+    assert not search_toggle.is_checked()
+    assert returned_radii == closed_radii
+    assert output_box["height"] == 0
+
+
 def test_editorial_header_content_aligns_with_page_content(page: Page, site_url: str) -> None:
     page.set_viewport_size({"width": 1920, "height": 1080})
     page.goto(f"{site_url}/prototypes/editorial-registry/", wait_until="networkidle")
