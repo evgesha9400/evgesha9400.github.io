@@ -358,17 +358,8 @@ body:has(.prototype--editorial) .md-header__button.md-logo::after {
   transition: background-color 160ms ease, color 160ms ease;
 }
 
-.prototype--editorial .prototype-brand span {
-  background: var(--editorial-accent);
-  border-radius: 50%;
-  color: var(--editorial-accent-contrast);
-  height: 2rem;
-  width: 2rem;
-}
-
 .editorial-hero {
   border-bottom: 1px solid var(--editorial-ink);
-  border-top: 1px solid var(--editorial-ink);
   display: grid;
   gap: clamp(2rem, 5vw, 5rem);
   grid-template-columns: minmax(0, 1.7fr) minmax(16rem, 0.65fr);

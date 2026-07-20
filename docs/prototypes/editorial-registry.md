@@ -5,10 +5,6 @@ hide:
 ---
 
 <main class="home-prototype prototype--editorial" data-prototype="editorial">
-  <header class="prototype-bar">
-    <a class="prototype-brand" href="../../"><span>OS</span> Selected open-source work</a>
-    <span>Public engineering / 2026</span>
-  </header>
   <section class="editorial-hero">
     <div class="editorial-hero__title">
       <p class="prototype-kicker">Open-source libraries</p>

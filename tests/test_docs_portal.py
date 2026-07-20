@@ -267,6 +267,7 @@ def test_editorial_prototype_is_a_personal_open_source_portfolio(page: Page, sit
     )
     expect(prototype.get_by_text("Prototype 01 / Editorial", exact=True)).to_have_count(0)
     expect(prototype.get_by_text("Compare all directions", exact=False)).to_have_count(0)
+    expect(prototype.locator(".prototype-bar")).to_have_count(0)
 
 
 def test_editorial_prototype_keeps_large_desktop_sections_compact(
@@ -461,7 +462,7 @@ def test_editorial_header_content_aligns_with_page_content(page: Page, site_url:
     page.set_viewport_size({"width": 1920, "height": 1080})
     page.goto(f"{site_url}/prototypes/editorial-registry/", wait_until="networkidle")
 
-    page_content = page.locator(".prototype-bar").bounding_box()
+    page_content = page.locator(".editorial-hero").bounding_box()
     header_brand = page.locator(".md-header__button.md-logo").bounding_box()
     header_source = page.locator(".md-header__source").bounding_box()
 
