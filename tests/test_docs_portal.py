@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import http.server
+import json
 import socketserver
 import subprocess
 import threading
@@ -16,6 +17,7 @@ ARTIFACTS_DIRECTORY = PROJECT_ROOT / "test-results"
 VERIFY_WORKFLOW_PATH = PROJECT_ROOT / ".github" / "workflows" / "verify.yml"
 DEPLOY_WORKFLOW_PATH = PROJECT_ROOT / ".github" / "workflows" / "deploy-pages.yml"
 EXTERNAL_LINKS_WORKFLOW_PATH = PROJECT_ROOT / ".github" / "workflows" / "external-links.yml"
+IG_RELEASE_RECORD_PATH = PROJECT_ROOT / "catalog" / "releases" / "ig-trading-lib.json"
 
 
 class _SiteRequestHandler(http.server.SimpleHTTPRequestHandler):
@@ -64,12 +66,18 @@ def page(browser: Browser) -> Iterator[Page]:
 
 
 def test_portal_cards_expose_source_and_package_links(page: Page, site_url: str) -> None:
+    release_record = json.loads(IG_RELEASE_RECORD_PATH.read_text(encoding="utf-8"))
+    release_version = release_record["version"]
+    documentation_url = release_record["documentation_url"]
+
     page.goto(site_url, wait_until="networkidle")
 
     expect(page).to_have_title("Evgeny Aleshin")
     expect(page.get_by_role("heading", name="IG Trading Library")).to_be_visible()
     expect(page.get_by_role("heading", name="KuCoin Futures Library")).to_be_visible()
-    expect(page.get_by_text("documentation available · v3.0.0", exact=True)).to_be_visible()
+    expect(
+        page.get_by_text(f"documentation available · v{release_version}", exact=True)
+    ).to_be_visible()
     expect(page.get_by_text("documentation forthcoming", exact=True)).to_be_visible()
 
     ig_card = page.locator("[data-library='ig-trading-lib']")
@@ -81,8 +89,8 @@ def test_portal_cards_expose_source_and_package_links(page: Page, site_url: str)
     expect(ig_card.get_by_role("link", name="Package on PyPI")).to_have_attribute(
         "href", "https://pypi.org/project/ig-trading-lib/"
     )
-    expect(ig_card.get_by_role("link", name="Documentation v3.0.0")).to_have_attribute(
-        "href", "https://evgesha9400.github.io/ig-trading-lib/3.0.0/"
+    expect(ig_card.get_by_role("link", name=f"Documentation v{release_version}")).to_have_attribute(
+        "href", documentation_url
     )
     expect(kucoin_card.get_by_role("link", name="Source code")).to_have_attribute(
         "href", "https://github.com/evgesha9400/kucoin-futures-lib"
