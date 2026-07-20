@@ -156,7 +156,11 @@ def test_home_prototype_index_links_all_three_directions(page: Page, site_url: s
 @pytest.mark.parametrize(
     ("route", "prototype_name", "heading"),
     [
-        ("editorial-registry", "editorial", "Software, documented with intent."),
+        (
+            "editorial-registry",
+            "editorial",
+            "Dependable tools for complex systems.",
+        ),
         ("systems-console", "console", "Two libraries. One reliable interface."),
         ("library-constellation", "constellation", "Find the right library by orbit."),
     ],
@@ -195,7 +199,7 @@ def test_editorial_prototype_has_release_provenance_and_a_real_dark_theme(
     page.goto(f"{site_url}/prototypes/editorial-registry/", wait_until="networkidle")
 
     prototype = page.locator("[data-prototype='editorial']")
-    expect(prototype.get_by_text("Release-synchronised", exact=True)).to_be_visible()
+    expect(prototype.get_by_text("Public code · released packages", exact=True)).to_be_visible()
     light_background = prototype.evaluate("element => getComputedStyle(element).backgroundColor")
     light_foreground = prototype.evaluate("element => getComputedStyle(element).color")
 
@@ -219,6 +223,34 @@ def test_editorial_prototype_has_release_provenance_and_a_real_dark_theme(
     ig_documentation = prototype.get_by_role("link", name="IG documentation", exact=True)
     ig_documentation.focus()
     assert ig_documentation.evaluate("element => getComputedStyle(element).outlineStyle") != "none"
+
+
+def test_editorial_prototype_is_a_personal_open_source_portfolio(page: Page, site_url: str) -> None:
+    page.goto(f"{site_url}/prototypes/editorial-registry/", wait_until="networkidle")
+
+    prototype = page.locator("[data-prototype='editorial']")
+    expect(prototype.get_by_text("Evgeny Aleshin · Open-source engineering")).to_be_visible()
+    expect(
+        prototype.get_by_text("This is the public side of my engineering practice", exact=False)
+    ).to_be_visible()
+    expect(prototype.get_by_role("heading", name="What I optimise for")).to_be_visible()
+    expect(prototype.get_by_role("heading", name="Clear interfaces")).to_be_visible()
+    expect(prototype.get_by_role("heading", name="Operational safety")).to_be_visible()
+    expect(prototype.get_by_role("heading", name="Developer experience")).to_be_visible()
+    expect(prototype.get_by_text("API architecture", exact=True)).to_be_visible()
+    expect(prototype.get_by_text("Real-time systems", exact=True)).to_be_visible()
+    expect(prototype.get_by_text("Release engineering", exact=True)).to_be_visible()
+    expect(prototype.get_by_role("link", name="IG package", exact=True)).to_have_attribute(
+        "href", "https://pypi.org/project/ig-trading-lib/"
+    )
+    expect(prototype.get_by_role("link", name="KuCoin package", exact=True)).to_have_attribute(
+        "href", "https://pypi.org/project/kucoin-futures-lib/"
+    )
+    expect(prototype.get_by_role("link", name="More work on GitHub")).to_have_attribute(
+        "href", "https://github.com/evgesha9400"
+    )
+    expect(prototype.get_by_text("Prototype 01 / Editorial", exact=True)).to_have_count(0)
+    expect(prototype.get_by_text("Compare all directions", exact=False)).to_have_count(0)
 
 
 def test_portal_mobile_card_layout_produces_a_visual_artifact(page: Page, site_url: str) -> None:
