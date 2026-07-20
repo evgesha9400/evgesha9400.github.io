@@ -242,13 +242,19 @@ def test_editorial_prototype_is_a_personal_open_source_portfolio(page: Page, sit
     expect(
         prototype.get_by_text("A catalogue of Python libraries I maintain", exact=False)
     ).to_be_visible()
-    expect(prototype.get_by_role("heading", name="Areas covered")).to_be_visible()
-    expect(prototype.get_by_role("heading", name="API clients")).to_be_visible()
-    expect(prototype.get_by_role("heading", name="Reliability boundaries")).to_be_visible()
-    expect(prototype.get_by_role("heading", name="Project maintenance")).to_be_visible()
-    expect(prototype.get_by_text("REST and Lightstreamer", exact=True)).to_be_visible()
-    expect(prototype.get_by_text("Typed models and errors", exact=True)).to_be_visible()
-    expect(prototype.get_by_text("Versioned releases", exact=True)).to_be_visible()
+    expect(prototype.get_by_role("heading", name="Catalogue status")).to_be_visible()
+    expect(prototype.get_by_role("heading", name="Public repositories")).to_be_visible()
+    expect(prototype.get_by_role("heading", name="PyPI packages")).to_be_visible()
+    expect(prototype.get_by_role("heading", name="Published documentation")).to_be_visible()
+    expect(prototype.get_by_text("Both projects are public on GitHub.", exact=True)).to_be_visible()
+    expect(
+        prototype.get_by_text("Both projects are distributed through PyPI.", exact=True)
+    ).to_be_visible()
+    expect(
+        prototype.get_by_text(
+            "Versioned documentation is published for IG Trading Library", exact=False
+        )
+    ).to_be_visible()
     expect(
         prototype.get_by_role("link", name="IG Trading Library Package", exact=True)
     ).to_have_attribute("href", "https://pypi.org/project/ig-trading-lib/")

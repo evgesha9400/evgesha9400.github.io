@@ -21,24 +21,24 @@ hide:
   </section>
   <section class="editorial-practice" aria-labelledby="editorial-practice-heading">
     <div class="editorial-practice__intro">
-      <p class="prototype-kicker">Current scope</p>
-      <h2 id="editorial-practice-heading">Areas covered</h2>
+      <p class="prototype-kicker">Current catalogue</p>
+      <h2 id="editorial-practice-heading">Catalogue status</h2>
     </div>
     <div class="editorial-practice__grid">
       <article>
-        <span>01</span>
-        <h3>API clients</h3>
-        <p>REST and streaming integrations for financial services, with synchronous and asynchronous interfaces.</p>
+        <span>02</span>
+        <h3>Public repositories</h3>
+        <p>Both projects are public on GitHub.</p>
       </article>
       <article>
         <span>02</span>
-        <h3>Reliability boundaries</h3>
-        <p>Typed errors, guarded mutations, credential handling, retry rules, and explicit ambiguous outcomes.</p>
+        <h3>PyPI packages</h3>
+        <p>Both projects are distributed through PyPI.</p>
       </article>
       <article>
-        <span>03</span>
-        <h3>Project maintenance</h3>
-        <p>Tests, documentation, examples, packaging, release automation, and machine-readable contracts.</p>
+        <span>01</span>
+        <h3>Published documentation</h3>
+        <p>Versioned documentation is published for IG Trading Library. The KuCoin Futures Library reference is in development.</p>
       </article>
     </div>
   </section>
