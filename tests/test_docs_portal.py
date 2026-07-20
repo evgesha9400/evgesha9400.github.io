@@ -179,12 +179,17 @@ def test_home_prototypes_are_distinct_accessible_library_indexes(
     expect(page.get_by_role("heading", name=heading, exact=True)).to_be_visible()
     expect(prototype.get_by_text("IG Trading Library", exact=True)).to_be_visible()
     expect(prototype.get_by_text("KuCoin Futures Library", exact=True)).to_be_visible()
-    expect(prototype.get_by_role("link", name="IG documentation", exact=True)).to_have_attribute(
+    documentation_link = prototype.get_by_role("link", name="IG documentation", exact=True)
+    source_link = prototype.get_by_role("link", name="IG source", exact=True)
+    if prototype_name == "editorial":
+        documentation_link = prototype.get_by_role(
+            "link", name="IG Trading Library documentation", exact=True
+        )
+        source_link = prototype.get_by_role("link", name="IG Trading Library source", exact=True)
+    expect(documentation_link).to_have_attribute(
         "href", "https://evgesha9400.github.io/ig-trading-lib/latest/"
     )
-    expect(prototype.get_by_role("link", name="IG source", exact=True)).to_have_attribute(
-        "href", "https://github.com/evgesha9400/ig-trading-lib"
-    )
+    expect(source_link).to_have_attribute("href", "https://github.com/evgesha9400/ig-trading-lib")
 
     page.set_viewport_size({"width": 390, "height": 844})
     page.reload(wait_until="networkidle")
@@ -220,7 +225,9 @@ def test_editorial_prototype_has_release_provenance_and_a_real_dark_theme(
     page.reload(wait_until="networkidle")
     assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth")
 
-    ig_documentation = prototype.get_by_role("link", name="IG documentation", exact=True)
+    ig_documentation = prototype.get_by_role(
+        "link", name="IG Trading Library documentation", exact=True
+    )
     ig_documentation.focus()
     assert ig_documentation.evaluate("element => getComputedStyle(element).outlineStyle") != "none"
 
@@ -240,17 +247,42 @@ def test_editorial_prototype_is_a_personal_open_source_portfolio(page: Page, sit
     expect(prototype.get_by_text("API architecture", exact=True)).to_be_visible()
     expect(prototype.get_by_text("Real-time systems", exact=True)).to_be_visible()
     expect(prototype.get_by_text("Release engineering", exact=True)).to_be_visible()
-    expect(prototype.get_by_role("link", name="IG package", exact=True)).to_have_attribute(
-        "href", "https://pypi.org/project/ig-trading-lib/"
-    )
-    expect(prototype.get_by_role("link", name="KuCoin package", exact=True)).to_have_attribute(
-        "href", "https://pypi.org/project/kucoin-futures-lib/"
-    )
+    expect(
+        prototype.get_by_role("link", name="IG Trading Library package", exact=True)
+    ).to_have_attribute("href", "https://pypi.org/project/ig-trading-lib/")
+    expect(
+        prototype.get_by_role("link", name="KuCoin Futures Library package", exact=True)
+    ).to_have_attribute("href", "https://pypi.org/project/kucoin-futures-lib/")
     expect(prototype.get_by_role("link", name="More work on GitHub")).to_have_attribute(
         "href", "https://github.com/evgesha9400"
     )
     expect(prototype.get_by_text("Prototype 01 / Editorial", exact=True)).to_have_count(0)
     expect(prototype.get_by_text("Compare all directions", exact=False)).to_have_count(0)
+
+
+def test_editorial_prototype_keeps_large_desktop_sections_compact(
+    page: Page, site_url: str
+) -> None:
+    page.set_viewport_size({"width": 1920, "height": 1080})
+    page.goto(f"{site_url}/prototypes/editorial-registry/", wait_until="networkidle")
+
+    hero = page.locator(".editorial-hero").bounding_box()
+    practice = page.locator(".editorial-practice").bounding_box()
+    entries = page.locator(".editorial-entry")
+
+    assert hero is not None
+    assert practice is not None
+    assert hero["height"] <= 560
+    assert practice["height"] <= 300
+    for index in range(entries.count()):
+        entry = entries.nth(index).bounding_box()
+        assert entry is not None
+        assert entry["height"] <= 400
+
+    heading_size = page.locator(".editorial-hero h1").evaluate(
+        "element => parseFloat(getComputedStyle(element).fontSize)"
+    )
+    assert heading_size <= 120
 
 
 def test_portal_mobile_card_layout_produces_a_visual_artifact(page: Page, site_url: str) -> None:

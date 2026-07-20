@@ -57,9 +57,9 @@ hide:
         <ul><li>API architecture</li><li>Real-time systems</li><li>Safety-first automation</li><li>Release engineering</li></ul>
       </div>
       <div class="editorial-entry__actions">
-        <a href="https://evgesha9400.github.io/ig-trading-lib/latest/">IG documentation</a>
-        <a href="https://github.com/evgesha9400/ig-trading-lib">IG source</a>
-        <a href="https://pypi.org/project/ig-trading-lib/">IG package</a>
+        <a href="https://evgesha9400.github.io/ig-trading-lib/latest/">IG Trading Library documentation</a>
+        <a href="https://github.com/evgesha9400/ig-trading-lib">IG Trading Library source</a>
+        <a href="https://pypi.org/project/ig-trading-lib/">IG Trading Library package</a>
         <code>pip install ig-trading-lib</code>
       </div>
     </article>
@@ -73,8 +73,8 @@ hide:
       </div>
       <div class="editorial-entry__actions">
         <span>Documentation will accompany the next release</span>
-        <a href="https://github.com/evgesha9400/kucoin-futures-lib">KuCoin source</a>
-        <a href="https://pypi.org/project/kucoin-futures-lib/">KuCoin package</a>
+        <a href="https://github.com/evgesha9400/kucoin-futures-lib">KuCoin Futures Library source</a>
+        <a href="https://pypi.org/project/kucoin-futures-lib/">KuCoin Futures Library package</a>
         <code>pip install kucoin-futures-lib</code>
       </div>
     </article>
