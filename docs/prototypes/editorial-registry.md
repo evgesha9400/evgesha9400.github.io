@@ -11,7 +11,7 @@ hide:
   </header>
   <section class="editorial-hero">
     <div class="editorial-hero__title">
-      <p class="prototype-kicker">Evgeny Aleshin · Maintained open-source projects</p>
+      <p class="prototype-kicker">Open-source libraries</p>
       <h1>Open-source Python libraries.</h1>
     </div>
     <div class="editorial-hero__note">

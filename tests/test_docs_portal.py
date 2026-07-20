@@ -236,9 +236,7 @@ def test_editorial_prototype_is_a_personal_open_source_portfolio(page: Page, sit
     page.goto(f"{site_url}/prototypes/editorial-registry/", wait_until="networkidle")
 
     prototype = page.locator("[data-prototype='editorial']")
-    expect(
-        prototype.get_by_text("Evgeny Aleshin · Maintained open-source projects")
-    ).to_be_visible()
+    expect(prototype.get_by_text("Open-source libraries", exact=True)).to_be_visible()
     expect(
         prototype.get_by_text("A catalogue of Python libraries I maintain", exact=False)
     ).to_be_visible()
