@@ -299,7 +299,15 @@ body:has(.prototype--editorial) .md-grid {
     background-color: transparent;
     height: 100vh;
     inset: 0;
+    pointer-events: none;
     width: 100vw;
+  }
+
+  body:has(.prototype--editorial)
+    [data-md-toggle="search"]:checked
+    ~ .md-header
+    .md-search__overlay {
+    pointer-events: auto;
   }
 
   body:has(.prototype--editorial) .md-search__form,
