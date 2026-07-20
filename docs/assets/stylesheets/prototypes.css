@@ -221,6 +221,27 @@ body:has(.prototype--editorial) .md-header {
   background: var(--editorial-header);
 }
 
+body:has(.prototype--editorial) .md-header__option {
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+body:has(.prototype--editorial) .md-header__option .md-header__button {
+  background: rgb(255 255 255 / 7%);
+  border: 1px solid rgb(255 255 255 / 38%);
+  border-radius: 50%;
+  box-sizing: border-box;
+  color: #fff;
+  opacity: 1;
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+body:has(.prototype--editorial) .md-header__option .md-header__button:hover {
+  background: rgb(255 255 255 / 15%);
+  border-color: #fff;
+}
+
 body:has(.prototype--editorial) .md-grid {
   max-width: 68rem;
 }
@@ -237,7 +258,7 @@ body:has(.prototype--editorial) .md-grid {
   }
 
   body:has(.prototype--editorial) .md-search {
-    --editorial-search-width: min(34.4rem, calc(100vw - 24rem));
+    --editorial-search-width: min(27.5rem, calc(100vw - 24rem));
 
     left: calc(50% - var(--editorial-search-width) / 2);
     position: absolute;
@@ -362,10 +383,10 @@ body:has(.prototype--editorial) .md-header__button.md-logo::after {
 .md-typeset .prototype--editorial h1 {
   color: var(--editorial-ink);
   font-family: georgia, "Times New Roman", serif;
-  font-size: clamp(3.6rem, 6vw, 6.5rem);
+  font-size: clamp(3.6rem, 6vw, 5.4rem);
   font-weight: 400;
   letter-spacing: -0.075em;
-  line-height: 0.94;
+  line-height: 1.04;
   margin: 0;
   max-width: 64rem;
 }
@@ -1144,7 +1165,7 @@ body:has(.prototype--constellation) .md-header {
 
   .md-typeset .prototype--editorial h1 {
     font-size: clamp(3rem, 14vw, 3.4rem);
-    line-height: 0.9;
+    line-height: 1.04;
   }
 
   .editorial-index__heading span:nth-child(2) {

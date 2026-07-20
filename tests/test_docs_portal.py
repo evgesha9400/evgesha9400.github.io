@@ -295,7 +295,52 @@ def test_editorial_prototype_keeps_large_desktop_sections_compact(
         "element => parseFloat(getComputedStyle(element).lineHeight)"
     )
     assert heading_size <= 120
-    assert heading_line_height >= heading_size * 0.9
+    assert heading_line_height >= heading_size * 1.02
+
+
+def test_editorial_wide_heading_does_not_overlap(page: Page, site_url: str) -> None:
+    page.set_viewport_size({"width": 2648, "height": 1354})
+    page.goto(f"{site_url}/prototypes/editorial-registry/", wait_until="networkidle")
+
+    heading = page.locator(".editorial-hero h1")
+    typography = heading.evaluate(
+        """element => ({
+            fontSize: parseFloat(getComputedStyle(element).fontSize),
+            lineHeight: parseFloat(getComputedStyle(element).lineHeight),
+        })"""
+    )
+
+    assert typography["fontSize"] <= 132
+    assert typography["lineHeight"] >= typography["fontSize"] * 1.02
+
+
+@pytest.mark.parametrize("viewport_width", [1440, 2648])
+def test_editorial_theme_toggle_remains_discoverable(
+    page: Page, site_url: str, viewport_width: int
+) -> None:
+    page.set_viewport_size({"width": viewport_width, "height": 900})
+    page.goto(f"{site_url}/prototypes/editorial-registry/", wait_until="networkidle")
+
+    dark_mode = page.get_by_title("Switch to dark mode")
+    expect(dark_mode).to_be_visible()
+    boundary = dark_mode.evaluate(
+        """element => ({
+            borderWidth: parseFloat(getComputedStyle(element).borderTopWidth),
+            opacity: Number(getComputedStyle(element).opacity),
+        })"""
+    )
+    assert boundary["borderWidth"] >= 1
+    assert boundary["opacity"] == 1
+
+    search_box = page.locator(".md-search").bounding_box()
+    toggle_box = dark_mode.bounding_box()
+    assert search_box is not None
+    assert toggle_box is not None
+    assert search_box["x"] + search_box["width"] + 8 <= toggle_box["x"]
+
+    dark_mode.click()
+    expect(page.locator("body")).to_have_attribute("data-md-color-scheme", "slate")
+    expect(page.get_by_title("Switch to light mode")).to_be_visible()
 
 
 @pytest.mark.parametrize(
