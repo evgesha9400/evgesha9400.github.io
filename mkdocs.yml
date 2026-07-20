@@ -33,6 +33,11 @@ theme:
 
 nav:
   - Home: index.md
+  - Home prototypes:
+      - Compare directions: prototypes/index.md
+      - Editorial registry: prototypes/editorial-registry.md
+      - Systems console: prototypes/systems-console.md
+      - Library constellation: prototypes/library-constellation.md
   - Libraries:
       - IG Trading Library: libraries/ig-trading-lib.md
       - KuCoin Futures Library: libraries/kucoin-futures-lib.md
@@ -70,5 +75,6 @@ extra:
 
 extra_css:
   - assets/stylesheets/extra.css
+  - assets/stylesheets/prototypes.css
 
 copyright: Copyright &copy; 2026 Evgeny Aleshin

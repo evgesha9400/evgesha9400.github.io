@@ -137,6 +137,58 @@ def test_portal_has_a_single_column_mobile_layout(page: Page, site_url: str) -> 
     assert screenshot_path.read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
 
 
+def test_home_prototype_index_links_all_three_directions(page: Page, site_url: str) -> None:
+    page.goto(f"{site_url}/prototypes/", wait_until="networkidle")
+
+    prototype_links = page.locator("[data-prototype-link]")
+    expect(prototype_links).to_have_count(3)
+    expect(page.get_by_role("link", name="Explore editorial registry")).to_have_attribute(
+        "href", "editorial-registry/"
+    )
+    expect(page.get_by_role("link", name="Explore systems console")).to_have_attribute(
+        "href", "systems-console/"
+    )
+    expect(page.get_by_role("link", name="Explore library constellation")).to_have_attribute(
+        "href", "library-constellation/"
+    )
+
+
+@pytest.mark.parametrize(
+    ("route", "prototype_name", "heading"),
+    [
+        ("editorial-registry", "editorial", "Software, documented with intent."),
+        ("systems-console", "console", "Two libraries. One reliable interface."),
+        ("library-constellation", "constellation", "Find the right library by orbit."),
+    ],
+)
+def test_home_prototypes_are_distinct_accessible_library_indexes(
+    page: Page,
+    site_url: str,
+    route: str,
+    prototype_name: str,
+    heading: str,
+) -> None:
+    page.goto(f"{site_url}/prototypes/{route}/", wait_until="networkidle")
+
+    prototype = page.locator(f"[data-prototype='{prototype_name}']")
+    expect(prototype).to_be_visible()
+    expect(page.get_by_role("heading", name=heading, exact=True)).to_be_visible()
+    expect(prototype.get_by_text("IG Trading Library", exact=True)).to_be_visible()
+    expect(prototype.get_by_text("KuCoin Futures Library", exact=True)).to_be_visible()
+    expect(prototype.get_by_role("link", name="IG documentation", exact=True)).to_have_attribute(
+        "href", "https://evgesha9400.github.io/ig-trading-lib/latest/"
+    )
+    expect(prototype.get_by_role("link", name="IG source", exact=True)).to_have_attribute(
+        "href", "https://github.com/evgesha9400/ig-trading-lib"
+    )
+
+    page.set_viewport_size({"width": 390, "height": 844})
+    page.reload(wait_until="networkidle")
+    assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth")
+    mobile_heading = page.get_by_role("heading", name=heading, exact=True)
+    assert mobile_heading.evaluate("element => element.scrollWidth <= element.clientWidth")
+
+
 def test_portal_mobile_card_layout_produces_a_visual_artifact(page: Page, site_url: str) -> None:
     page.set_viewport_size({"width": 390, "height": 844})
     page.goto(site_url, wait_until="networkidle")
