@@ -339,6 +339,22 @@ def test_editorial_theme_toggle_remains_discoverable(
     assert toggle_box is not None
     assert search_box["x"] + search_box["width"] + 8 <= toggle_box["x"]
 
+    page.get_by_role("textbox", name="Search").click()
+    page.wait_for_timeout(250)
+    focused_search_box = page.locator(".md-search__form").bounding_box()
+    focused_toggle_box = dark_mode.bounding_box()
+    focused_source_box = page.locator(".md-header__source").bounding_box()
+    focused_toggle_opacity = page.locator(".md-header__option").evaluate(
+        "element => Number(getComputedStyle(element).opacity)"
+    )
+    assert focused_search_box is not None
+    assert focused_toggle_box is not None
+    assert focused_source_box is not None
+    assert focused_toggle_opacity == 1
+    assert focused_toggle_box["width"] >= 32
+    assert focused_search_box["x"] + focused_search_box["width"] + 8 <= focused_toggle_box["x"]
+    assert focused_toggle_box["x"] + focused_toggle_box["width"] + 8 <= focused_source_box["x"]
+
     dark_mode.click()
     expect(page.locator("body")).to_have_attribute("data-md-color-scheme", "slate")
     expect(page.get_by_title("Switch to light mode")).to_be_visible()
@@ -409,8 +425,11 @@ def test_editorial_search_joins_rounded_input_and_results(page: Page, site_url: 
     page.goto(f"{site_url}/prototypes/editorial-registry/", wait_until="networkidle")
 
     search_input = page.get_by_role("textbox", name="Search")
+    closed_form_box = page.locator(".md-search__form").bounding_box()
     search_input.click()
+    page.wait_for_timeout(250)
     search_form = page.locator(".md-search__form")
+    search_inner = page.locator(".md-search__inner")
     search_output = page.locator(".md-search__output")
 
     form_radii = search_form.evaluate(
@@ -444,9 +463,14 @@ def test_editorial_search_joins_rounded_input_and_results(page: Page, site_url: 
     assert output_radii[3] != "0px"
 
     form_box = search_form.bounding_box()
+    inner_box = search_inner.bounding_box()
     output_box = search_output.bounding_box()
+    assert closed_form_box is not None
     assert form_box is not None
+    assert inner_box is not None
     assert output_box is not None
+    assert abs(form_box["width"] - closed_form_box["width"]) <= 1
+    assert abs(inner_box["width"] - closed_form_box["width"]) <= 1
     assert abs(form_box["x"] - output_box["x"]) <= 1
     assert abs(form_box["width"] - output_box["width"]) <= 1
     assert form_box["width"] >= 500

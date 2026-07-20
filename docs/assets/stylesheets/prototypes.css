@@ -222,8 +222,10 @@ body:has(.prototype--editorial) .md-header {
 }
 
 body:has(.prototype--editorial) .md-header__option {
-  flex: 0 0 auto;
+  flex: 0 0 2.5rem;
+  min-width: 2.5rem;
   position: relative;
+  width: 2.5rem;
   z-index: 2;
 }
 
@@ -271,6 +273,20 @@ body:has(.prototype--editorial) .md-grid {
   body:has(.prototype--editorial) .md-search__form,
   body:has(.prototype--editorial) .md-search__output {
     width: 100%;
+  }
+
+  body:has(.prototype--editorial)
+    [data-md-toggle="search"]:checked
+    ~ .md-header
+    .md-search__inner {
+    width: 100%;
+  }
+
+  body:has(.prototype--editorial)
+    [data-md-toggle="search"]:checked
+    ~ .md-header
+    .md-header__option {
+    opacity: 1;
   }
 
   body:has(.prototype--editorial) .md-search__inner {
