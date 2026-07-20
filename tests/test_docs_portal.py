@@ -159,7 +159,7 @@ def test_home_prototype_index_links_all_three_directions(page: Page, site_url: s
         (
             "editorial-registry",
             "editorial",
-            "Dependable tools for complex systems.",
+            "Open-source Python libraries.",
         ),
         ("systems-console", "console", "Two libraries. One reliable interface."),
         ("library-constellation", "constellation", "Find the right library by orbit."),
@@ -236,17 +236,19 @@ def test_editorial_prototype_is_a_personal_open_source_portfolio(page: Page, sit
     page.goto(f"{site_url}/prototypes/editorial-registry/", wait_until="networkidle")
 
     prototype = page.locator("[data-prototype='editorial']")
-    expect(prototype.get_by_text("Evgeny Aleshin · Open-source engineering")).to_be_visible()
     expect(
-        prototype.get_by_text("This is the public side of my engineering practice", exact=False)
+        prototype.get_by_text("Evgeny Aleshin · Maintained open-source projects")
     ).to_be_visible()
-    expect(prototype.get_by_role("heading", name="What I optimise for")).to_be_visible()
-    expect(prototype.get_by_role("heading", name="Clear interfaces")).to_be_visible()
-    expect(prototype.get_by_role("heading", name="Operational safety")).to_be_visible()
-    expect(prototype.get_by_role("heading", name="Developer experience")).to_be_visible()
-    expect(prototype.get_by_text("API architecture", exact=True)).to_be_visible()
-    expect(prototype.get_by_text("Real-time systems", exact=True)).to_be_visible()
-    expect(prototype.get_by_text("Release engineering", exact=True)).to_be_visible()
+    expect(
+        prototype.get_by_text("A catalogue of Python libraries I maintain", exact=False)
+    ).to_be_visible()
+    expect(prototype.get_by_role("heading", name="Areas covered")).to_be_visible()
+    expect(prototype.get_by_role("heading", name="API clients")).to_be_visible()
+    expect(prototype.get_by_role("heading", name="Reliability boundaries")).to_be_visible()
+    expect(prototype.get_by_role("heading", name="Project maintenance")).to_be_visible()
+    expect(prototype.get_by_text("REST and Lightstreamer", exact=True)).to_be_visible()
+    expect(prototype.get_by_text("Typed models and errors", exact=True)).to_be_visible()
+    expect(prototype.get_by_text("Versioned releases", exact=True)).to_be_visible()
     expect(
         prototype.get_by_role("link", name="IG Trading Library package", exact=True)
     ).to_have_attribute("href", "https://pypi.org/project/ig-trading-lib/")
@@ -282,7 +284,11 @@ def test_editorial_prototype_keeps_large_desktop_sections_compact(
     heading_size = page.locator(".editorial-hero h1").evaluate(
         "element => parseFloat(getComputedStyle(element).fontSize)"
     )
+    heading_line_height = page.locator(".editorial-hero h1").evaluate(
+        "element => parseFloat(getComputedStyle(element).lineHeight)"
+    )
     assert heading_size <= 120
+    assert heading_line_height >= heading_size * 0.9
 
 
 def test_portal_mobile_card_layout_produces_a_visual_artifact(page: Page, site_url: str) -> None:

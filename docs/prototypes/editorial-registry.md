@@ -11,34 +11,34 @@ hide:
   </header>
   <section class="editorial-hero">
     <div class="editorial-hero__title">
-      <p class="prototype-kicker">Evgeny Aleshin · Open-source engineering</p>
-      <h1>Dependable tools for complex systems.</h1>
+      <p class="prototype-kicker">Evgeny Aleshin · Maintained open-source projects</p>
+      <h1>Open-source Python libraries.</h1>
     </div>
     <div class="editorial-hero__note">
-      <p>This is the public side of my engineering practice: maintained libraries where API design, operational safety, and documentation are treated as one product.</p>
-      <a href="#editorial-library-index">Explore selected work ↓</a>
+      <p>A catalogue of Python libraries I maintain. Each entry links to its source code, published package, and release documentation where available.</p>
+      <a href="#editorial-library-index">Browse projects ↓</a>
     </div>
   </section>
   <section class="editorial-practice" aria-labelledby="editorial-practice-heading">
     <div class="editorial-practice__intro">
-      <p class="prototype-kicker">Engineering practice</p>
-      <h2 id="editorial-practice-heading">What I optimise for</h2>
+      <p class="prototype-kicker">Current scope</p>
+      <h2 id="editorial-practice-heading">Areas covered</h2>
     </div>
     <div class="editorial-practice__grid">
       <article>
         <span>01</span>
-        <h3>Clear interfaces</h3>
-        <p>Complex provider APIs become consistent, typed surfaces with predictable synchronous and asynchronous paths.</p>
+        <h3>API clients</h3>
+        <p>REST and streaming integrations for financial services, with synchronous and asynchronous interfaces.</p>
       </article>
       <article>
         <span>02</span>
-        <h3>Operational safety</h3>
-        <p>Credentials, mutations, ambiguous outcomes, and provider failures are designed as explicit boundaries.</p>
+        <h3>Reliability boundaries</h3>
+        <p>Typed errors, guarded mutations, credential handling, retry rules, and explicit ambiguous outcomes.</p>
       </article>
       <article>
         <span>03</span>
-        <h3>Developer experience</h3>
-        <p>Documentation, examples, release automation, and machine-readable contracts ship with the code.</p>
+        <h3>Project maintenance</h3>
+        <p>Tests, documentation, examples, packaging, release automation, and machine-readable contracts.</p>
       </article>
     </div>
   </section>
@@ -53,8 +53,8 @@ hide:
       <div class="editorial-entry__body">
         <p class="editorial-entry__status">Maintained · released v3.0.1</p>
         <h2>IG Trading Library</h2>
-        <p>A production-minded Python SDK for IG's trading APIs. It turns a fragmented provider surface into matching synchronous and asynchronous clients, typed models, guarded mutations, structured failures, streaming abstractions, and versioned documentation.</p>
-        <ul><li>API architecture</li><li>Real-time systems</li><li>Safety-first automation</li><li>Release engineering</li></ul>
+        <p>A Python client library for the IG REST and Lightstreamer APIs. It provides matching synchronous and asynchronous clients, typed response models, guarded live mutations, structured exceptions, pagination, endpoint-version facades, and versioned documentation.</p>
+        <ul><li>REST and Lightstreamer</li><li>Sync and async</li><li>Typed models and errors</li><li>Versioned releases</li></ul>
       </div>
       <div class="editorial-entry__actions">
         <a href="https://evgesha9400.github.io/ig-trading-lib/latest/">IG Trading Library documentation</a>
@@ -68,8 +68,8 @@ hide:
       <div class="editorial-entry__body">
         <p class="editorial-entry__status">Maintained · reference in development</p>
         <h2>KuCoin Futures Library</h2>
-        <p>A focused wrapper around KuCoin Futures for market data, orders, account workflows, and websocket automation. The project explores composable trading primitives and reusable event-driven clients.</p>
-        <ul><li>Trading automation</li><li>Exchange integration</li><li>Websocket clients</li><li>Reusable execution helpers</li></ul>
+        <p>A Python wrapper for KuCoin Futures market data, trading, account, and websocket workflows. It includes synchronous and asynchronous entry points, order helpers, OCO handling, and reusable websocket components.</p>
+        <ul><li>Market and trade APIs</li><li>Account workflows</li><li>Websocket clients</li><li>Order helpers</li></ul>
       </div>
       <div class="editorial-entry__actions">
         <span>Documentation will accompany the next release</span>
@@ -80,7 +80,7 @@ hide:
     </article>
   </section>
   <footer class="prototype-footer">
-    <span>Open source makes engineering judgment inspectable.</span>
+    <span>Maintained by Evgeny Aleshin.</span>
     <a href="https://github.com/evgesha9400">More work on GitHub ↗</a>
   </footer>
 </main>

@@ -266,7 +266,7 @@ body:has(.prototype--editorial) .md-header__button.md-logo::after {
   font-size: clamp(3.6rem, 6vw, 6.5rem);
   font-weight: 400;
   letter-spacing: -0.075em;
-  line-height: 0.82;
+  line-height: 0.94;
   margin: 0;
   max-width: 64rem;
 }
