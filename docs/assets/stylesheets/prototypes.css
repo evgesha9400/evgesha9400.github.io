@@ -183,33 +183,72 @@ body:has(.home-prototype) .md-footer {
 /* Direction 01: editorial registry */
 
 body:has(.prototype--editorial) {
-  --md-default-bg-color: #f1eee5;
-  --md-default-fg-color: #191814;
-  --md-primary-fg-color: #171611;
-  --md-accent-fg-color: #e9361d;
+  --editorial-accent: #e9361d;
+  --editorial-accent-contrast: #fff8ed;
+  --editorial-background: #f1eee5;
+  --editorial-header: #171611;
+  --editorial-hover: rgb(233 54 29 / 5%);
+  --editorial-ink: #191814;
+  --editorial-muted: #68645b;
+  --editorial-rule: rgb(25 24 20 / 28%);
+  --md-accent-fg-color: var(--editorial-accent);
+  --md-default-bg-color: var(--editorial-background);
+  --md-default-fg-color: var(--editorial-ink);
+  --md-primary-fg-color: var(--editorial-header);
+}
+
+body[data-md-color-scheme="slate"]:has(.prototype--editorial) {
+  --editorial-accent: #ff654d;
+  --editorial-accent-contrast: #1a1814;
+  --editorial-background: #1b1915;
+  --editorial-header: #100f0d;
+  --editorial-hover: rgb(255 101 77 / 7%);
+  --editorial-ink: #f4efe4;
+  --editorial-muted: #aaa397;
+  --editorial-rule: rgb(244 239 228 / 26%);
 }
 
 body:has(.prototype--editorial) .md-header {
-  background: #171611;
+  background: var(--editorial-header);
+}
+
+body:has(.prototype--editorial) .md-header__button.md-logo svg {
+  display: none;
+}
+
+body:has(.prototype--editorial) .md-header__button.md-logo::after {
+  align-items: center;
+  background: var(--editorial-accent);
+  border-radius: 50%;
+  color: var(--editorial-accent-contrast);
+  content: "EA";
+  display: inline-flex;
+  font-size: 0.48rem;
+  font-weight: 850;
+  height: 1.65rem;
+  justify-content: center;
+  letter-spacing: 0.03em;
+  width: 1.65rem;
 }
 
 .prototype--editorial {
-  background: #f1eee5;
-  color: #191814;
+  background: var(--editorial-background);
+  color: var(--editorial-ink);
   font-family: arial, helvetica, sans-serif;
+  transition: background-color 160ms ease, color 160ms ease;
 }
 
 .prototype--editorial .prototype-brand span {
-  background: #e9361d;
+  background: var(--editorial-accent);
   border-radius: 50%;
-  color: #fff8ed;
+  color: var(--editorial-accent-contrast);
   height: 2rem;
   width: 2rem;
 }
 
 .editorial-hero {
-  border-bottom: 1px solid #191814;
-  border-top: 1px solid #191814;
+  border-bottom: 1px solid var(--editorial-ink);
+  border-top: 1px solid var(--editorial-ink);
   display: grid;
   gap: clamp(2rem, 6vw, 7rem);
   grid-template-columns: minmax(0, 1.7fr) minmax(16rem, 0.65fr);
@@ -217,12 +256,12 @@ body:has(.prototype--editorial) .md-header {
 }
 
 .prototype--editorial .prototype-kicker {
-  color: #e9361d;
+  color: var(--editorial-accent);
   margin: 0 0 1.5rem;
 }
 
 .md-typeset .prototype--editorial h1 {
-  color: #191814;
+  color: var(--editorial-ink);
   font-family: georgia, "Times New Roman", serif;
   font-size: clamp(4rem, 10vw, 9.5rem);
   font-weight: 400;
@@ -234,7 +273,7 @@ body:has(.prototype--editorial) .md-header {
 
 .editorial-hero__note {
   align-self: end;
-  border-left: 1px solid #191814;
+  border-left: 1px solid var(--editorial-ink);
   padding-left: clamp(1rem, 3vw, 2rem);
 }
 
@@ -247,15 +286,32 @@ body:has(.prototype--editorial) .md-header {
 
 .md-typeset .editorial-hero__note a,
 .md-typeset .editorial-entry__actions a {
-  color: #191814;
+  color: var(--editorial-ink);
   font-weight: 800;
-  text-decoration-color: #e9361d;
+  text-decoration-color: var(--editorial-accent);
   text-decoration-thickness: 0.15em;
   text-underline-offset: 0.22em;
 }
 
+.md-typeset .editorial-entry__actions a {
+  border-bottom: 1px solid transparent;
+  padding-bottom: 0.15rem;
+  transition: border-color 140ms ease, color 140ms ease;
+}
+
+.md-typeset .editorial-entry__actions a:hover {
+  border-bottom-color: var(--editorial-accent);
+  color: var(--editorial-accent);
+}
+
+.prototype--editorial a:focus,
+.prototype--editorial a:focus-visible {
+  outline: 0.2rem solid var(--editorial-accent);
+  outline-offset: 0.22rem;
+}
+
 .editorial-index__heading {
-  border-bottom: 1px solid #191814;
+  border-bottom: 1px solid var(--editorial-ink);
   display: grid;
   font-size: 0.65rem;
   grid-template-columns: 1fr 1fr 1fr;
@@ -273,15 +329,23 @@ body:has(.prototype--editorial) .md-header {
 }
 
 .editorial-entry {
-  border-bottom: 1px solid #191814;
+  border-bottom: 1px solid var(--editorial-ink);
   display: grid;
   gap: 2rem;
   grid-template-columns: 4rem minmax(0, 1fr) minmax(14rem, 0.48fr);
+  margin-inline: -1rem;
   padding: clamp(2rem, 5vw, 4rem) 0;
+  padding-inline: 1rem;
+  transition: background-color 140ms ease;
+}
+
+.editorial-entry:hover,
+.editorial-entry:focus-within {
+  background: var(--editorial-hover);
 }
 
 .editorial-entry__number {
-  color: #e9361d;
+  color: var(--editorial-accent);
   font-family: georgia, "Times New Roman", serif;
   font-size: 1.5rem;
 }
@@ -294,7 +358,7 @@ body:has(.prototype--editorial) .md-header {
 }
 
 .editorial-entry--live .editorial-entry__status::before {
-  background: #e9361d;
+  background: var(--editorial-accent);
   border-radius: 50%;
   content: "";
   display: inline-block;
@@ -304,6 +368,7 @@ body:has(.prototype--editorial) .md-header {
 }
 
 .md-typeset .editorial-entry h2 {
+  color: var(--editorial-ink);
   font-family: georgia, "Times New Roman", serif;
   font-size: clamp(2.2rem, 5vw, 4.7rem);
   font-weight: 400;
@@ -329,7 +394,7 @@ body:has(.prototype--editorial) .md-header {
 }
 
 .editorial-entry__body li::before {
-  color: #e9361d;
+  color: var(--editorial-accent);
   content: "◆";
   font-size: 0.48rem;
   margin-right: 0.45rem;
@@ -342,15 +407,15 @@ body:has(.prototype--editorial) .md-header {
 }
 
 .editorial-entry__actions span {
-  color: #68645b;
+  color: var(--editorial-muted);
   font-size: 0.78rem;
 }
 
 .editorial-entry__actions code {
   background: transparent;
-  border-top: 1px solid rgb(25 24 20 / 25%);
+  border-top: 1px solid var(--editorial-rule);
   box-shadow: none;
-  color: #68645b;
+  color: var(--editorial-muted);
   font-size: 0.68rem;
   margin-top: 0.3rem;
   padding: 0.8rem 0 0;
@@ -862,7 +927,7 @@ body:has(.prototype--constellation) .md-header {
 
   .editorial-hero__note {
     border-left: 0;
-    border-top: 1px solid #191814;
+    border-top: 1px solid var(--editorial-ink);
     padding: 1.5rem 0 0;
   }
 

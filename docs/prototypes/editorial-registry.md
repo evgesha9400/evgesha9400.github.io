@@ -6,7 +6,7 @@ hide:
 
 <main class="home-prototype prototype--editorial" data-prototype="editorial">
   <header class="prototype-bar">
-    <a class="prototype-brand" href="../"><span>EA</span> Open-source registry</a>
+    <a class="prototype-brand" href="../"><span>R</span> Open-source registry</a>
     <span>Prototype 01 / Editorial</span>
   </header>
   <section class="editorial-hero">
@@ -23,7 +23,7 @@ hide:
     <div class="editorial-index__heading">
       <span>Registry / 2026</span>
       <span>02 maintained libraries</span>
-      <span>London, UK</span>
+      <span>Release-synchronised</span>
     </div>
     <article class="editorial-entry editorial-entry--live">
       <div class="editorial-entry__number">01</div>

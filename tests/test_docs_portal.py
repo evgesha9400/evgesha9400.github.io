@@ -189,6 +189,38 @@ def test_home_prototypes_are_distinct_accessible_library_indexes(
     assert mobile_heading.evaluate("element => element.scrollWidth <= element.clientWidth")
 
 
+def test_editorial_prototype_has_release_provenance_and_a_real_dark_theme(
+    page: Page, site_url: str
+) -> None:
+    page.goto(f"{site_url}/prototypes/editorial-registry/", wait_until="networkidle")
+
+    prototype = page.locator("[data-prototype='editorial']")
+    expect(prototype.get_by_text("Release-synchronised", exact=True)).to_be_visible()
+    light_background = prototype.evaluate("element => getComputedStyle(element).backgroundColor")
+    light_foreground = prototype.evaluate("element => getComputedStyle(element).color")
+
+    page.get_by_title("Switch to dark mode").click()
+    expect(page.locator("body")).to_have_attribute("data-md-color-scheme", "slate")
+    dark_background = prototype.evaluate("element => getComputedStyle(element).backgroundColor")
+    dark_foreground = prototype.evaluate("element => getComputedStyle(element).color")
+
+    assert dark_background != light_background
+    assert dark_foreground != light_foreground
+
+    ARTIFACTS_DIRECTORY.mkdir(exist_ok=True)
+    screenshot_path = ARTIFACTS_DIRECTORY / "prototype-editorial-dark.png"
+    page.screenshot(path=str(screenshot_path), full_page=True)
+    assert screenshot_path.read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
+
+    page.set_viewport_size({"width": 390, "height": 844})
+    page.reload(wait_until="networkidle")
+    assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth")
+
+    ig_documentation = prototype.get_by_role("link", name="IG documentation", exact=True)
+    ig_documentation.focus()
+    assert ig_documentation.evaluate("element => getComputedStyle(element).outlineStyle") != "none"
+
+
 def test_portal_mobile_card_layout_produces_a_visual_artifact(page: Page, site_url: str) -> None:
     page.set_viewport_size({"width": 390, "height": 844})
     page.goto(site_url, wait_until="networkidle")
