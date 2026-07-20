@@ -48,7 +48,7 @@ hide:
       <span>02 maintained projects</span>
       <span>Public code · released packages</span>
     </div>
-    <article class="editorial-entry editorial-entry--live">
+    <article class="editorial-entry editorial-entry--live" data-library="ig-trading-lib">
       <div class="editorial-entry__number">01</div>
       <div class="editorial-entry__body">
         <p class="editorial-entry__status">Maintained · released v3.0.1</p>
@@ -60,10 +60,14 @@ hide:
         <a href="https://evgesha9400.github.io/ig-trading-lib/latest/">IG Trading Library Documentation</a>
         <a href="https://github.com/evgesha9400/ig-trading-lib">IG Trading Library Source</a>
         <a href="https://pypi.org/project/ig-trading-lib/">IG Trading Library Package</a>
-        <code>pip install ig-trading-lib</code>
+        <div class="editorial-install" id="ig-install-command" markdown>
+```shell
+pip install ig-trading-lib
+```
+        </div>
       </div>
     </article>
-    <article class="editorial-entry">
+    <article class="editorial-entry" data-library="kucoin-futures-lib">
       <div class="editorial-entry__number">02</div>
       <div class="editorial-entry__body">
         <p class="editorial-entry__status">Maintained · reference in development</p>
@@ -75,7 +79,11 @@ hide:
         <span>Documentation will accompany the next release</span>
         <a href="https://github.com/evgesha9400/kucoin-futures-lib">KuCoin Futures Library Source</a>
         <a href="https://pypi.org/project/kucoin-futures-lib/">KuCoin Futures Library Package</a>
-        <code>pip install kucoin-futures-lib</code>
+        <div class="editorial-install" id="kucoin-install-command" markdown>
+```shell
+pip install kucoin-futures-lib
+```
+        </div>
       </div>
     </article>
   </section>

@@ -463,14 +463,20 @@ body:has(.prototype--editorial) .md-header__button.md-logo::after {
   font-size: 0.78rem;
 }
 
-.editorial-entry__actions code {
-  background: transparent;
+.editorial-install {
   border-top: 1px solid var(--editorial-rule);
-  box-shadow: none;
-  color: var(--editorial-muted);
-  font-size: 0.68rem;
   margin-top: 0.3rem;
-  padding: 0.8rem 0 0;
+  padding-top: 0.8rem;
+}
+
+.md-typeset .editorial-install .highlight,
+.md-typeset .editorial-install pre {
+  margin: 0;
+}
+
+.md-typeset .editorial-install pre {
+  border-radius: 0.25rem;
+  font-size: 0.68rem;
 }
 
 /* Direction 02: systems console */

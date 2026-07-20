@@ -300,6 +300,29 @@ def test_editorial_prototype_keeps_large_desktop_sections_compact(
     assert heading_line_height >= heading_size * 0.9
 
 
+@pytest.mark.parametrize(
+    ("library_id", "command"),
+    [
+        ("ig-trading-lib", "pip install ig-trading-lib"),
+        ("kucoin-futures-lib", "pip install kucoin-futures-lib"),
+    ],
+)
+def test_editorial_install_commands_are_highlighted_and_copyable(
+    page: Page, site_url: str, library_id: str, command: str
+) -> None:
+    page.context.grant_permissions(["clipboard-read", "clipboard-write"], origin=site_url)
+    page.goto(f"{site_url}/prototypes/editorial-registry/", wait_until="networkidle")
+
+    install = page.locator(f"[data-library='{library_id}'] .editorial-install")
+    expect(install.locator(".language-shell")).to_contain_text(command)
+    copy_button = install.get_by_title("Copy to clipboard")
+    expect(copy_button).to_be_visible()
+
+    copy_button.click()
+    page.wait_for_timeout(100)
+    assert page.evaluate("navigator.clipboard.readText()") == command
+
+
 def test_portal_mobile_card_layout_produces_a_visual_artifact(page: Page, site_url: str) -> None:
     page.set_viewport_size({"width": 390, "height": 844})
     page.goto(site_url, wait_until="networkidle")
