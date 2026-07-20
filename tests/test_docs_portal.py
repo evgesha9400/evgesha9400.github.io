@@ -375,6 +375,24 @@ def test_editorial_search_joins_rounded_input_and_results(page: Page, site_url: 
     assert screenshot_path.read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
 
 
+def test_editorial_header_content_aligns_with_page_content(page: Page, site_url: str) -> None:
+    page.set_viewport_size({"width": 1920, "height": 1080})
+    page.goto(f"{site_url}/prototypes/editorial-registry/", wait_until="networkidle")
+
+    page_content = page.locator(".prototype-bar").bounding_box()
+    header_brand = page.locator(".md-header__button.md-logo").bounding_box()
+    header_source = page.locator(".md-header__source").bounding_box()
+
+    assert page_content is not None
+    assert header_brand is not None
+    assert header_source is not None
+    assert abs(header_brand["x"] - page_content["x"]) <= 2
+    assert (
+        abs(header_source["x"] + header_source["width"] - page_content["x"] - page_content["width"])
+        <= 2
+    )
+
+
 def test_portal_mobile_card_layout_produces_a_visual_artifact(page: Page, site_url: str) -> None:
     page.set_viewport_size({"width": 390, "height": 844})
     page.goto(site_url, wait_until="networkidle")
