@@ -183,9 +183,9 @@ def test_home_prototypes_are_distinct_accessible_library_indexes(
     source_link = prototype.get_by_role("link", name="IG source", exact=True)
     if prototype_name == "editorial":
         documentation_link = prototype.get_by_role(
-            "link", name="IG Trading Library documentation", exact=True
+            "link", name="IG Trading Library Documentation", exact=True
         )
-        source_link = prototype.get_by_role("link", name="IG Trading Library source", exact=True)
+        source_link = prototype.get_by_role("link", name="IG Trading Library Source", exact=True)
     expect(documentation_link).to_have_attribute(
         "href", "https://evgesha9400.github.io/ig-trading-lib/latest/"
     )
@@ -226,7 +226,7 @@ def test_editorial_prototype_has_release_provenance_and_a_real_dark_theme(
     assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth")
 
     ig_documentation = prototype.get_by_role(
-        "link", name="IG Trading Library documentation", exact=True
+        "link", name="IG Trading Library Documentation", exact=True
     )
     ig_documentation.focus()
     assert ig_documentation.evaluate("element => getComputedStyle(element).outlineStyle") != "none"
@@ -250,11 +250,14 @@ def test_editorial_prototype_is_a_personal_open_source_portfolio(page: Page, sit
     expect(prototype.get_by_text("Typed models and errors", exact=True)).to_be_visible()
     expect(prototype.get_by_text("Versioned releases", exact=True)).to_be_visible()
     expect(
-        prototype.get_by_role("link", name="IG Trading Library package", exact=True)
+        prototype.get_by_role("link", name="IG Trading Library Package", exact=True)
     ).to_have_attribute("href", "https://pypi.org/project/ig-trading-lib/")
     expect(
-        prototype.get_by_role("link", name="KuCoin Futures Library package", exact=True)
+        prototype.get_by_role("link", name="KuCoin Futures Library Package", exact=True)
     ).to_have_attribute("href", "https://pypi.org/project/kucoin-futures-lib/")
+    expect(
+        prototype.get_by_role("link", name="KuCoin Futures Library Source", exact=True)
+    ).to_have_attribute("href", "https://github.com/evgesha9400/kucoin-futures-lib")
     expect(prototype.get_by_role("link", name="More work on GitHub")).to_have_attribute(
         "href", "https://github.com/evgesha9400"
     )

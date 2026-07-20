@@ -57,9 +57,9 @@ hide:
         <ul><li>REST and Lightstreamer</li><li>Sync and async</li><li>Typed models and errors</li><li>Versioned releases</li></ul>
       </div>
       <div class="editorial-entry__actions">
-        <a href="https://evgesha9400.github.io/ig-trading-lib/latest/">IG Trading Library documentation</a>
-        <a href="https://github.com/evgesha9400/ig-trading-lib">IG Trading Library source</a>
-        <a href="https://pypi.org/project/ig-trading-lib/">IG Trading Library package</a>
+        <a href="https://evgesha9400.github.io/ig-trading-lib/latest/">IG Trading Library Documentation</a>
+        <a href="https://github.com/evgesha9400/ig-trading-lib">IG Trading Library Source</a>
+        <a href="https://pypi.org/project/ig-trading-lib/">IG Trading Library Package</a>
         <code>pip install ig-trading-lib</code>
       </div>
     </article>
@@ -73,8 +73,8 @@ hide:
       </div>
       <div class="editorial-entry__actions">
         <span>Documentation will accompany the next release</span>
-        <a href="https://github.com/evgesha9400/kucoin-futures-lib">KuCoin Futures Library source</a>
-        <a href="https://pypi.org/project/kucoin-futures-lib/">KuCoin Futures Library package</a>
+        <a href="https://github.com/evgesha9400/kucoin-futures-lib">KuCoin Futures Library Source</a>
+        <a href="https://pypi.org/project/kucoin-futures-lib/">KuCoin Futures Library Package</a>
         <code>pip install kucoin-futures-lib</code>
       </div>
     </article>
