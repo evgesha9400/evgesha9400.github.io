@@ -321,6 +321,60 @@ def test_editorial_install_commands_are_highlighted_and_copyable(
     assert page.evaluate("navigator.clipboard.readText()") == command
 
 
+def test_editorial_search_joins_rounded_input_and_results(page: Page, site_url: str) -> None:
+    page.set_viewport_size({"width": 1440, "height": 1000})
+    page.goto(f"{site_url}/prototypes/editorial-registry/", wait_until="networkidle")
+
+    search_input = page.get_by_role("textbox", name="Search")
+    search_input.click()
+    search_form = page.locator(".md-search__form")
+    search_output = page.locator(".md-search__output")
+
+    form_radii = search_form.evaluate(
+        """element => {
+            const style = getComputedStyle(element)
+            return [
+                style.borderTopLeftRadius,
+                style.borderTopRightRadius,
+                style.borderBottomRightRadius,
+                style.borderBottomLeftRadius,
+            ]
+        }"""
+    )
+    output_radii = search_output.evaluate(
+        """element => {
+            const style = getComputedStyle(element)
+            return [
+                style.borderTopLeftRadius,
+                style.borderTopRightRadius,
+                style.borderBottomRightRadius,
+                style.borderBottomLeftRadius,
+            ]
+        }"""
+    )
+
+    assert float(form_radii[0].removesuffix("px")) >= 12
+    assert float(form_radii[1].removesuffix("px")) >= 12
+    assert form_radii[2:] == ["0px", "0px"]
+    assert output_radii[:2] == ["0px", "0px"]
+    assert output_radii[2] != "0px"
+    assert output_radii[3] != "0px"
+
+    form_box = search_form.bounding_box()
+    output_box = search_output.bounding_box()
+    assert form_box is not None
+    assert output_box is not None
+    assert abs(form_box["x"] - output_box["x"]) <= 1
+    assert abs(form_box["width"] - output_box["width"]) <= 1
+    assert form_box["width"] >= 500
+    assert abs(form_box["x"] + form_box["width"] / 2 - 720) <= 1
+
+    ARTIFACTS_DIRECTORY.mkdir(exist_ok=True)
+    screenshot_path = ARTIFACTS_DIRECTORY / "editorial-search-open.png"
+    page.screenshot(path=str(screenshot_path))
+    assert screenshot_path.read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
+
+
 def test_portal_mobile_card_layout_produces_a_visual_artifact(page: Page, site_url: str) -> None:
     page.set_viewport_size({"width": 390, "height": 844})
     page.goto(site_url, wait_until="networkidle")

@@ -212,6 +212,85 @@ body:has(.prototype--editorial) .md-header {
   background: var(--editorial-header);
 }
 
+@media screen and (min-width: 60em) {
+  body:has(.prototype--editorial) .md-header__inner {
+    position: static;
+  }
+
+  body:has(.prototype--editorial) .md-search {
+    --editorial-search-width: min(34.4rem, calc(100vw - 24rem));
+
+    left: calc(50% - var(--editorial-search-width) / 2);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: var(--editorial-search-width);
+  }
+
+  body:has(.prototype--editorial) .md-search__inner,
+  body:has(.prototype--editorial) .md-search__form,
+  body:has(.prototype--editorial) .md-search__output {
+    width: 100%;
+  }
+
+  body:has(.prototype--editorial) .md-search__inner {
+    float: none;
+  }
+
+  body:has(.prototype--editorial) .md-search__overlay {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: transparent;
+  }
+
+  body:has(.prototype--editorial) .md-search__form,
+  body:has(.prototype--editorial) .md-search__form:hover {
+    background: #fff;
+    border-radius: 999px;
+    color: #161616;
+  }
+
+  body:has(.prototype--editorial) .md-search__input,
+  body:has(.prototype--editorial) .md-search__input::placeholder {
+    color: #393939;
+  }
+
+  body:has(.prototype--editorial) .md-search__input:focus-visible {
+    outline: none;
+  }
+
+  body:has(.prototype--editorial) .md-search__inner:focus-within .md-search__form {
+    border-radius: 0.85rem 0.85rem 0 0;
+    box-shadow: 0 0 0 2px #393939;
+  }
+
+  body:has(.prototype--editorial) .md-search__inner:focus-within .md-search__output {
+    --md-code-bg-color: #f4f4f4;
+    --md-code-fg-color: #161616;
+    --md-default-bg-color: #fff;
+    --md-default-bg-color--light: #f4f4f4;
+    --md-default-fg-color: #161616;
+    --md-default-fg-color--light: #6f6f6f;
+    --md-default-fg-color--lighter: #e0e0e0;
+
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 0 0 0.85rem 0.85rem;
+    border-top: 0;
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 14%);
+    color: #161616;
+    max-height: 28rem;
+    opacity: 1;
+    padding-top: 0.5rem;
+    top: 100%;
+  }
+
+  body:has(.prototype--editorial) .md-search__inner:focus-within .md-search__scrollwrap {
+    max-height: 28rem;
+    overflow-y: auto;
+  }
+}
+
 body:has(.prototype--editorial) .md-header__button.md-logo svg {
   display: none;
 }
